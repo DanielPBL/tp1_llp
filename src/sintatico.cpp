@@ -1,12 +1,24 @@
 #include "sintatico.h"
+#include <cstdio>
+#include <string>
 
 AnaliseSintatica::AnaliseSintatica(Scanner& lexica) : lexica(lexica) {
   this->atual = lexica.getLexema();
 }
 
 void AnaliseSintatica::matchToken(int tipo) {
-  if (this->atual.tipo == tipo) this->atual = this->lexica.getLexema();
-  else throw "Lexema não esperado";
+  if (this->atual.tipo == tipo) {
+    this->atual = this->lexica.getLexema();
+  } else {
+    char *l         = new char[10];
+    std::string msg = "";
+    sprintf(l, "%02d", this->lexica.getLinha());
+    std::string linha(l);
+    delete l;
+
+    msg += linha + ": Lexema não esperado [" + this->atual.token + "]";
+    throw msg;
+  }
 }
 
 void AnaliseSintatica::init() {
@@ -55,7 +67,7 @@ void AnaliseSintatica::procComando() {
     break;
 
   case VARIAVEL:
-    this->procVar();
+    this->procAtribuir();
     break;
 
   case SE:

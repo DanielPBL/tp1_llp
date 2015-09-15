@@ -1,6 +1,8 @@
 #include <iostream>
+#include <string>
 #include <list>
 #include "scanner.h"
+#include "sintatico.h"
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
@@ -15,10 +17,13 @@ int main(int argc, char **argv) {
 
   try {
     Scanner scanner(argv[1]);
-    Lexema  lexema;
+    AnaliseSintatica sintatico(scanner);
 
-    while ((lexema = scanner.getLexema()).tipo != FIM_ARQ_NORMAL) {
-      if (lexema.tipo < 0) {
+    sintatico.init();
+
+    /*
+       while ((lexema = scanner.getLexema()).tipo != FIM_ARQ_NORMAL) {
+       if (lexema.tipo < 0) {
         switch (lexema.tipo) {
         case FIM_ARQ_INEXPERADO:
           cout << "Fim de arquivo inexperado!";
@@ -30,12 +35,12 @@ int main(int argc, char **argv) {
           break;
         }
         return EXIT_FAILURE;
-      } else {
+       } else {
         cout << "Token: " << lexema.token << " - Tipo: " << lexema.tipo << endl;
-      }
-    }
-  } catch (const char *msg) {
-    cout << msg;
+       }
+       }*/
+  } catch (string msg) {
+    cout << msg << endl;
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

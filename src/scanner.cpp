@@ -1,11 +1,12 @@
 #include "scanner.h"
+#include <string>
 
 Scanner::Scanner(char *arquivo) {
   this->arquivo.open(arquivo);
   this->linha = 1;
   this->criarTabelaSimbolos();
 
-  if (!this->arquivo.is_open()) throw "Erro ao abrir o arquivo!\n";
+  if (!this->arquivo.is_open()) throw std::string("Erro ao abrir o arquivo!\n");
 }
 
 Scanner::~Scanner() {
@@ -41,12 +42,13 @@ bool Scanner::isLetter(char c) {
 }
 
 bool Scanner::isBlank(char ch) {
-  return ch == '\n' || ch == '\t' || ch == '\b';
+  return ch == '\r' || ch == '\n' || ch == '\t' || ch == ' ';
 }
 
 bool Scanner::isSimbolo(char ch) {
   return ch == '(' || ch == ')' || ch == ';' || ch == '<' || ch == ':' ||
-         ch == '.' || ch == '%' || ch == '+' || ch == '-' || ch == '*';
+         ch == '.' || ch == '%' || ch == '+' || ch == '-' || ch == '*' || ch ==
+         ',';
 }
 
 int Scanner::consultarTabelaSimbolos(std::string token) {
@@ -153,15 +155,13 @@ Lexema Scanner::getLexema() {
     switch (estado) {
     case 1:
 
-      if (Scanner::isBlank(ch)) continue;
-
-      if (Scanner::isSimbolo(ch)) {
+      if (Scanner::isBlank(ch)) {
+        continue;
+      } else if (Scanner::isSimbolo(ch)) {
         lexema.token += ch;
         lexema.tipo   = this->consultarTabelaSimbolos(lexema.token);
         estado        = 10;
-      }
-
-      if (ch == '=') {
+      } else if (ch == '=') {
         lexema.token += ch;
         estado        = 2;
       } else if (ch == '>') {
@@ -180,6 +180,10 @@ Lexema Scanner::getLexema() {
         estado        = 7;
       } else if (ch == '/') {
         estado = 8;
+      } else {
+        lexema.token += ch;
+        lexema.tipo   = TOKEN_INVALIDO;
+        estado        = 10;
       }
       break;
 
