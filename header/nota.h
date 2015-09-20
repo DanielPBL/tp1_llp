@@ -1,7 +1,7 @@
 #ifndef __NOTA_H__
 #define __NOTA_H__
 
-enum class Nota : double {
+enum Nota {
   La = 440.0,
   LaSustenido = 466.2,
   Si = 493.9,
