@@ -1,17 +1,17 @@
 #ifndef __SINTATICO_H__
 #define __SINTATICO_H__
 
-#include "scanner.h"
+#include "lexico.h"
 
-class AnaliseSintatica {
+class AnalisadorSintatico {
 private:
 
-  Scanner& lexica;
-  Lexema   atual;
+  AnalisadorLexico& lexica;
+  Lexema atual;
 
 public:
 
-  AnaliseSintatica(Scanner& lexica);
+  AnalisadorSintatico(AnalisadorLexico& lexica);
   void matchToken(int);
   void init();
 

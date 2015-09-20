@@ -1,7 +1,7 @@
-#include "scanner.h"
+#include "lexico.h"
 #include <string>
 
-Scanner::Scanner(char *arquivo) {
+AnalisadorLexico::AnalisadorLexico(char *arquivo) {
   this->arquivo.open(arquivo);
   this->linha = 1;
   this->criarTabelaSimbolos();
@@ -9,56 +9,56 @@ Scanner::Scanner(char *arquivo) {
   if (!this->arquivo.is_open()) throw std::string("Erro ao abrir o arquivo!\n");
 }
 
-Scanner::~Scanner() {
+AnalisadorLexico::~AnalisadorLexico() {
   if (this->arquivo.is_open()) this->arquivo.close();
 }
 
-int Scanner::getLinha() {
+int AnalisadorLexico::getLinha() {
   return this->linha;
 }
 
-bool Scanner::isDigit(char c) {
+bool AnalisadorLexico::isDigit(char c) {
   int ch = (int)c;
 
   return ch >= 48 && ch <= 57;
 }
 
-bool Scanner::isLowerLetter(char c) {
+bool AnalisadorLexico::isLowerLetter(char c) {
   int ch = (int)c;
 
   return ch >= 97 && ch <= 122;
 }
 
-bool Scanner::isUperLetter(char c) {
+bool AnalisadorLexico::isUperLetter(char c) {
   int ch = (int)c;
 
   return ch >= 65 && ch <= 90;
 }
 
-bool Scanner::isLetter(char c) {
+bool AnalisadorLexico::isLetter(char c) {
   int ch = (int)c;
 
   return (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122);
 }
 
-bool Scanner::isBlank(char ch) {
+bool AnalisadorLexico::isBlank(char ch) {
   return ch == '\r' || ch == '\n' || ch == '\t' || ch == ' ';
 }
 
-bool Scanner::isSimbolo(char ch) {
+bool AnalisadorLexico::isSimbolo(char ch) {
   return ch == '(' || ch == ')' || ch == ';' || ch == '<' || ch == ':' ||
          ch == '.' || ch == '%' || ch == '+' || ch == '-' || ch == '*' || ch ==
          ',';
 }
 
-int Scanner::consultarTabelaSimbolos(std::string token) {
+int AnalisadorLexico::consultarTabelaSimbolos(std::string token) {
   if (this->tabelaSimbolos.find(token) !=
       this->tabelaSimbolos.end()) return this->tabelaSimbolos[token];
 
   return TOKEN_INVALIDO;
 }
 
-void Scanner::criarTabelaSimbolos() {
+void AnalisadorLexico::criarTabelaSimbolos() {
   this->tabelaSimbolos["tempo"]   = TEMPO;
   this->tabelaSimbolos["musica"]  = MUSICA;
   this->tabelaSimbolos["faca"]    = FACA;
@@ -126,14 +126,14 @@ void Scanner::criarTabelaSimbolos() {
   this->tabelaSimbolos[","]       = VIRGULA;
 }
 
-void Scanner::ungetChar(char ch) {
+void AnalisadorLexico::ungetChar(char ch) {
   if (ch == '\n') {
     this->linha--;
   }
   this->arquivo.unget();
 }
 
-Lexema Scanner::getLexema() {
+Lexema AnalisadorLexico::getLexema() {
   Lexema lexema;
   char   ch;
 
@@ -147,7 +147,7 @@ Lexema Scanner::getLexema() {
     if (ch == '\n') this->linha++;
 
     if ((this->arquivo.eof() || this->arquivo.fail())) {
-      if (estado != 1) lexema.tipo = FIM_ARQ_INEXPERADO;
+      if (estado != 1) lexema.tipo = FIM_ARQ_INESPERADO;
 
       break;
     }
@@ -155,9 +155,9 @@ Lexema Scanner::getLexema() {
     switch (estado) {
     case 1:
 
-      if (Scanner::isBlank(ch)) {
+      if (AnalisadorLexico::isBlank(ch)) {
         continue;
-      } else if (Scanner::isSimbolo(ch)) {
+      } else if (AnalisadorLexico::isSimbolo(ch)) {
         lexema.token += ch;
         lexema.tipo   = this->consultarTabelaSimbolos(lexema.token);
         estado        = 10;
@@ -170,12 +170,12 @@ Lexema Scanner::getLexema() {
       } else if (ch == '!') {
         lexema.token += ch;
         estado        = 4;
-      } else if (Scanner::isDigit(ch)) {
+      } else if (AnalisadorLexico::isDigit(ch)) {
         lexema.token += ch;
         estado        = 5;
       } else if (ch == '"') {
         estado = 6;
-      } else if (Scanner::isLetter(ch)) {
+      } else if (AnalisadorLexico::isLetter(ch)) {
         lexema.token += ch;
         estado        = 7;
       } else if (ch == '/') {
@@ -227,7 +227,7 @@ Lexema Scanner::getLexema() {
 
     case 5:
 
-      if (Scanner::isDigit(ch)) {
+      if (AnalisadorLexico::isDigit(ch)) {
         lexema.token += ch;
       } else {
         lexema.tipo = NUMERO;
@@ -248,7 +248,7 @@ Lexema Scanner::getLexema() {
 
     case 7:
 
-      if (Scanner::isLetter(ch) || (ch == '#')) {
+      if (AnalisadorLexico::isLetter(ch) || (ch == '#')) {
         lexema.token += ch;
       } else {
         lexema.tipo = this->consultarTabelaSimbolos(lexema.token);

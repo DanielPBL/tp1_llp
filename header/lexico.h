@@ -1,11 +1,11 @@
-#ifndef __SCANNER_H__
-#define __SCANNER_H__
+#ifndef __LEXICO_H__
+#define __LEXICO_H__
 
 #include <fstream>
 #include <string>
 #include <map>
 
-#define FIM_ARQ_INEXPERADO -2
+#define FIM_ARQ_INESPERADO -2
 #define TOKEN_INVALIDO     -1
 #define FIM_ARQ_NORMAL     0
 #define TEMPO              1
@@ -45,7 +45,7 @@ typedef struct LEXEMA {
   int         tipo;
 } Lexema;
 
-class Scanner {
+class AnalisadorLexico {
 private:
 
   std::ifstream arquivo;
@@ -54,8 +54,8 @@ private:
 
 public:
 
-  Scanner(char *arquivo);
-  ~Scanner();
+  AnalisadorLexico(char *arquivo);
+  ~AnalisadorLexico();
   Lexema getLexema();
   int    getLinha();
 
@@ -72,4 +72,4 @@ private:
   static bool isSimbolo(char);
 };
 
-#endif // ifndef __SCANNER_H__
+#endif // ifndef __LEXICO_H__

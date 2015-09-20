@@ -2,11 +2,12 @@
 #include <cstdio>
 #include <string>
 
-AnaliseSintatica::AnaliseSintatica(Scanner& lexica) : lexica(lexica) {
+AnalisadorSintatico::AnalisadorSintatico(AnalisadorLexico& lexica) : lexica(
+                                                                       lexica) {
   this->atual = lexica.getLexema();
 }
 
-void AnaliseSintatica::matchToken(int tipo) {
+void AnalisadorSintatico::matchToken(int tipo) {
   if (this->atual.tipo == tipo) {
     this->atual = this->lexica.getLexema();
   } else {
@@ -15,17 +16,31 @@ void AnaliseSintatica::matchToken(int tipo) {
     sprintf(l, "%02d", this->lexica.getLinha());
     std::string linha(l);
     delete l;
+    msg = linha + ": ";
 
-    msg += linha + ": Lexema não esperado [" + this->atual.token + "]";
+    switch (this->atual.tipo) {
+    case TOKEN_INVALIDO:
+      msg += "Lexema inválido [" + this->atual.token + "]";
+      break;
+
+    case FIM_ARQ_INESPERADO:
+    case FIM_ARQ_NORMAL:
+      msg += "Fim de arquivo inesperado";
+      break;
+
+    default:
+      msg += "Lexema não esperado [" + this->atual.token + "]";
+    }
+
     throw msg;
   }
 }
 
-void AnaliseSintatica::init() {
+void AnalisadorSintatico::init() {
   this->procPrograma();
 }
 
-void AnaliseSintatica::procPrograma() {
+void AnalisadorSintatico::procPrograma() {
   if (this->atual.tipo == TEMPO) this->procTempo();
   this->matchToken(MUSICA);
   this->procString();
@@ -36,13 +51,13 @@ void AnaliseSintatica::procPrograma() {
   this->matchToken(FIM_ARQ_NORMAL);
 }
 
-void AnaliseSintatica::procTempo() {
+void AnalisadorSintatico::procTempo() {
   this->matchToken(TEMPO);
   this->procNumero();
   this->matchToken(PONTO_VIRGULA);
 }
 
-void AnaliseSintatica::procComandos() {
+void AnalisadorSintatico::procComandos() {
   while (this->atual.tipo == TOCAR ||
          this->atual.tipo == PAUSAR ||
          this->atual.tipo == VARIAVEL ||
@@ -52,7 +67,7 @@ void AnaliseSintatica::procComandos() {
   }
 }
 
-void AnaliseSintatica::procComando() {
+void AnalisadorSintatico::procComando() {
   switch (this->atual.tipo) {
   case TOCAR:
     this->procTocar();
@@ -76,7 +91,7 @@ void AnaliseSintatica::procComando() {
   }
 }
 
-void AnaliseSintatica::procTocar() {
+void AnalisadorSintatico::procTocar() {
   this->matchToken(TOCAR);
   this->matchToken(ABRE_PARENTESES);
   this->procNota();
@@ -91,7 +106,7 @@ void AnaliseSintatica::procTocar() {
   this->matchToken(PONTO_VIRGULA);
 }
 
-void AnaliseSintatica::procDuracao() {
+void AnalisadorSintatico::procDuracao() {
   if (this->atual.tipo == PORCENTO) {
     this->matchToken(PORCENTO);
     this->procNumero();
@@ -102,7 +117,7 @@ void AnaliseSintatica::procDuracao() {
   }
 }
 
-void AnaliseSintatica::procPausar() {
+void AnalisadorSintatico::procPausar() {
   this->matchToken(PAUSAR);
   this->matchToken(ABRE_PARENTESES);
   this->procNumero();
@@ -110,14 +125,14 @@ void AnaliseSintatica::procPausar() {
   this->matchToken(PONTO_VIRGULA);
 }
 
-void AnaliseSintatica::procAtribuir() {
+void AnalisadorSintatico::procAtribuir() {
   this->procVar();
   this->matchToken(IGUAL);
   this->procIntExp();
   this->matchToken(PONTO_VIRGULA);
 }
 
-void AnaliseSintatica::procSe() {
+void AnalisadorSintatico::procSe() {
   this->matchToken(SE);
   this->matchToken(ABRE_PARENTESES);
   this->procBoolExp();
@@ -133,7 +148,7 @@ void AnaliseSintatica::procSe() {
   this->matchToken(FIM);
 }
 
-void AnaliseSintatica::procRepetir() {
+void AnalisadorSintatico::procRepetir() {
   this->matchToken(REPETIR);
   this->matchToken(ABRE_PARENTESES);
   this->procBoolExp();
@@ -144,29 +159,29 @@ void AnaliseSintatica::procRepetir() {
   this->matchToken(FIM);
 }
 
-void AnaliseSintatica::procString() {
+void AnalisadorSintatico::procString() {
   this->matchToken(STRING);
 }
 
-void AnaliseSintatica::procNumero() {
+void AnalisadorSintatico::procNumero() {
   this->matchToken(NUMERO);
 }
 
-void AnaliseSintatica::procNota() {
+void AnalisadorSintatico::procNota() {
   this->matchToken(NOTA);
 }
 
-void AnaliseSintatica::procVar() {
+void AnalisadorSintatico::procVar() {
   this->matchToken(VARIAVEL);
 }
 
-void AnaliseSintatica::procBoolExp() {
+void AnalisadorSintatico::procBoolExp() {
   this->procTerm();
   this->procRelOp();
   this->procTerm();
 }
 
-void AnaliseSintatica::procRelOp() {
+void AnalisadorSintatico::procRelOp() {
   switch (this->atual.tipo) {
   case IGUAL_IGUAL:
     this->matchToken(IGUAL_IGUAL);
@@ -194,7 +209,7 @@ void AnaliseSintatica::procRelOp() {
   }
 }
 
-void AnaliseSintatica::procIntExp() {
+void AnalisadorSintatico::procIntExp() {
   this->procTerm();
 
   if ((this->atual.tipo == MAIS) ||
@@ -206,7 +221,7 @@ void AnaliseSintatica::procIntExp() {
   }
 }
 
-void AnaliseSintatica::procArithOp() {
+void AnalisadorSintatico::procArithOp() {
   switch (this->atual.tipo) {
   case MAIS:
     this->matchToken(MAIS);
@@ -226,7 +241,7 @@ void AnaliseSintatica::procArithOp() {
   }
 }
 
-void AnaliseSintatica::procTerm() {
+void AnalisadorSintatico::procTerm() {
   if (this->atual.tipo == VARIAVEL) this->procVar();
   else this->procNumero();
 }
