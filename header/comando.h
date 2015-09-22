@@ -3,8 +3,7 @@
 
 class Comando {
 public:
-
-  void executar()
+  void executar();
 };
 
-#endif // ifndef __COMANDO_H__
+#endif

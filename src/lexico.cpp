@@ -1,4 +1,4 @@
-#include "lexico.h"
+#include "tp1.h"
 #include <string>
 
 AnalisadorLexico::AnalisadorLexico(char *arquivo) {

@@ -1,4 +1,4 @@
-#include "sintatico.h"
+#include "tp1.h"
 #include <cstdio>
 #include <string>
 
@@ -167,8 +167,15 @@ void AnalisadorSintatico::procNumero() {
   this->matchToken(NUMERO);
 }
 
-void AnalisadorSintatico::procNota() {
+Nota AnalisadorSintatico::procNota() {
+  std::string nota = this->atual.token;
+
   this->matchToken(NOTA);
+
+  if (nota == (std::string)Nota::La)
+    return Nota::La;
+
+  return Nota::Do;
 }
 
 void AnalisadorSintatico::procVar() {

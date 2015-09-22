@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "lexico.h"
-#include "sintatico.h"
+#include "tp1.h"
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
