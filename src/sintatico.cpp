@@ -167,15 +167,12 @@ void AnalisadorSintatico::procNumero() {
   this->matchToken(NUMERO);
 }
 
-Nota AnalisadorSintatico::procNota() {
+const Nota AnalisadorSintatico::procNota() {
   std::string nota = this->atual.token;
 
   this->matchToken(NOTA);
 
-  if (nota == (std::string)Nota::La)
-    return Nota::La;
-
-  return Nota::Do;
+  return Nota::nomeParaNota(nota);
 }
 
 void AnalisadorSintatico::procVar() {

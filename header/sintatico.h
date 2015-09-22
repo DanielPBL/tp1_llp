@@ -29,7 +29,7 @@ private:
   void procRepetir();
   void procString();
   void procNumero();
-  Nota procNota();
+  const Nota procNota();
   void procVar();
   void procBoolExp();
   void procRelOp();
