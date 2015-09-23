@@ -2,14 +2,17 @@
 #define __TEMPOCMD_H__
 
 #include "comando.h"
+#include "constint.h"
 
 class TempoComando : public Comando {
 private:
-  const int tempo;
+
+  ConstInt tempo;
 
 public:
-  TempoComando : tempo(tempo) {}
+
+  TempoComando(ConstInt);
   void executar();
 };
 
-#endif
+#endif // ifndef __TEMPOCMD_H__

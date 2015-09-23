@@ -1,7 +1,7 @@
 #ifndef __SINTATICO_H__
 #define __SINTATICO_H__
 
-#include "lexico.h"
+#include "tp1.h"
 
 class AnalisadorSintatico {
 private:
@@ -17,25 +17,25 @@ public:
 
 private:
 
-  void procPrograma();
-  void procTempo();
-  void procComandos();
-  void procComando();
-  void procTocar();
-  void procDuracao();
-  void procPausar();
-  void procAtribuir();
-  void procSe();
-  void procRepetir();
-  void procString();
-  void procNumero();
-  const Nota procNota();
-  void procVar();
-  void procBoolExp();
-  void procRelOp();
-  void procIntExp();
-  void procArithOp();
-  void procTerm();
+  void          procPrograma();
+  TempoComando* procTempo();
+  void          procComandos();
+  Comando*      procComando();
+  TocarComando* procTocar();
+  double        procDuracao();
+  void          procPausar();
+  void          procAtribuir();
+  void          procSe();
+  void          procRepetir();
+  std::string   procString();
+  ConstInt      procNumero();
+  Nota          procNota();
+  Variavel*     procVar();
+  void          procBoolExp();
+  void          procRelOp();
+  void          procIntExp();
+  void          procArithOp();
+  void          procTerm();
 };
 
 #endif // ifndef __SINTATICO_H__

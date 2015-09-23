@@ -1,6 +1,9 @@
 #include "tp1.h"
 #include <cstdio>
+#include <cstdlib>
 #include <string>
+
+using namespace std;
 
 AnalisadorSintatico::AnalisadorSintatico(AnalisadorLexico& lexica) : lexica(
                                                                        lexica) {
@@ -11,11 +14,10 @@ void AnalisadorSintatico::matchToken(int tipo) {
   if (this->atual.tipo == tipo) {
     this->atual = this->lexica.getLexema();
   } else {
-    char *l         = new char[10];
-    std::string msg = "";
+    char   l[10];
+    string msg = "";
     sprintf(l, "%02d", this->lexica.getLinha());
-    std::string linha(l);
-    delete l;
+    string linha(l);
     msg = linha + ": ";
 
     switch (this->atual.tipo) {
@@ -37,11 +39,13 @@ void AnalisadorSintatico::matchToken(int tipo) {
 }
 
 void AnalisadorSintatico::init() {
+  musica::initVars();
   this->procPrograma();
+  musica::destroiVars();
 }
 
 void AnalisadorSintatico::procPrograma() {
-  if (this->atual.tipo == TEMPO) this->procTempo();
+  if (this->atual.tipo == TEMPO) this->procTempo()->executar();
   this->matchToken(MUSICA);
   this->procString();
   this->matchToken(PONTO_VIRGULA);
@@ -51,10 +55,12 @@ void AnalisadorSintatico::procPrograma() {
   this->matchToken(FIM_ARQ_NORMAL);
 }
 
-void AnalisadorSintatico::procTempo() {
+TempoComando* AnalisadorSintatico::procTempo() {
   this->matchToken(TEMPO);
-  this->procNumero();
+  ConstInt tempo = this->procNumero();
   this->matchToken(PONTO_VIRGULA);
+
+  return new TempoComando(tempo);
 }
 
 void AnalisadorSintatico::procComandos() {
@@ -67,10 +73,12 @@ void AnalisadorSintatico::procComandos() {
   }
 }
 
-void AnalisadorSintatico::procComando() {
+Comando * AnalisadorSintatico::procComando() {
+  Comando *comando = NULL;
+
   switch (this->atual.tipo) {
   case TOCAR:
-    this->procTocar();
+    comando = this->procTocar();
     break;
 
   case PAUSAR:
@@ -89,32 +97,53 @@ void AnalisadorSintatico::procComando() {
     this->procSe();
     break;
   }
+
+  if (comando == NULL) comando = new Comando();
+
+  comando->executar();
+  delete comando;
+
+  return comando;
 }
 
-void AnalisadorSintatico::procTocar() {
+TocarComando * AnalisadorSintatico::procTocar() {
+  double duracao;
+  string palavra = "";
+
   this->matchToken(TOCAR);
   this->matchToken(ABRE_PARENTESES);
-  this->procNota();
+  Nota nota = this->procNota();
   this->matchToken(VIRGULA);
-  this->procDuracao();
+  duracao = this->procDuracao();
   this->matchToken(FECHA_PARENTESES);
 
   if (this->atual.tipo == DOIS_PONTOS) {
     this->matchToken(DOIS_PONTOS);
-    this->procString();
+    palavra = this->procString();
   }
   this->matchToken(PONTO_VIRGULA);
+
+  return new TocarComando(nota, duracao, palavra);
 }
 
-void AnalisadorSintatico::procDuracao() {
+double AnalisadorSintatico::procDuracao() {
+  double duracao = 0;
+
   if (this->atual.tipo == PORCENTO) {
     this->matchToken(PORCENTO);
-    this->procNumero();
+    ConstInt numero = this->procNumero();
+    duracao = musica::tempo / numero.getValor();
   } else {
-    this->procNumero();
+    ConstInt numero = this->procNumero();
+    duracao = musica::tempo / numero.getValor();
 
-    if (this->atual.tipo == PONTO) this->matchToken(PONTO);
+    if (this->atual.tipo == PONTO) {
+      this->matchToken(PONTO);
+      duracao *= 1.5;
+    }
   }
+
+  return duracao;
 }
 
 void AnalisadorSintatico::procPausar() {
@@ -159,24 +188,36 @@ void AnalisadorSintatico::procRepetir() {
   this->matchToken(FIM);
 }
 
-void AnalisadorSintatico::procString() {
+string AnalisadorSintatico::procString() {
+  string str = this->atual.token;
+
   this->matchToken(STRING);
+
+  return str;
 }
 
-void AnalisadorSintatico::procNumero() {
+ConstInt AnalisadorSintatico::procNumero() {
+  string num = this->atual.token;
+
   this->matchToken(NUMERO);
+
+  return ConstInt(atoi(num.c_str()));
 }
 
-const Nota AnalisadorSintatico::procNota() {
-  std::string nota = this->atual.token;
+Nota AnalisadorSintatico::procNota() {
+  string nota = this->atual.token;
 
   this->matchToken(NOTA);
 
   return Nota::nomeParaNota(nota);
 }
 
-void AnalisadorSintatico::procVar() {
+Variavel* AnalisadorSintatico::procVar() {
+  string var  = this->atual.token;
+
   this->matchToken(VARIAVEL);
+
+  return musica::vars[var];
 }
 
 void AnalisadorSintatico::procBoolExp() {

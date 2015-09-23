@@ -1,12 +1,14 @@
 #include "tp1.h"
 #include <string>
 
+using namespace std;
+
 AnalisadorLexico::AnalisadorLexico(char *arquivo) {
   this->arquivo.open(arquivo);
   this->linha = 1;
   this->criarTabelaSimbolos();
 
-  if (!this->arquivo.is_open()) throw std::string("Erro ao abrir o arquivo!\n");
+  if (!this->arquivo.is_open()) throw string("Erro ao abrir o arquivo!\n");
 }
 
 AnalisadorLexico::~AnalisadorLexico() {
@@ -51,7 +53,7 @@ bool AnalisadorLexico::isSimbolo(char ch) {
          ',';
 }
 
-int AnalisadorLexico::consultarTabelaSimbolos(std::string token) {
+int AnalisadorLexico::consultarTabelaSimbolos(string token) {
   if (this->tabelaSimbolos.find(token) !=
       this->tabelaSimbolos.end()) return this->tabelaSimbolos[token];
 
@@ -135,14 +137,14 @@ void AnalisadorLexico::ungetChar(char ch) {
 
 Lexema AnalisadorLexico::getLexema() {
   Lexema lexema;
-  char   ch;
+  char   ch = -1;
 
   lexema.tipo  = FIM_ARQ_NORMAL;
   lexema.token = "";
   int estado = 1;
 
   while (estado != 10) {
-    this->arquivo >> std::noskipws >> ch;
+    this->arquivo >> noskipws >> ch;
 
     if (ch == '\n') this->linha++;
 

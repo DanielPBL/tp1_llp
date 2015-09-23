@@ -3,7 +3,9 @@
 
 class Termo {
 public:
-  int getValor();
+
+  virtual int getValor();
+  virtual ~Termo();
 };
 
-#endif
+#endif // ifndef __TERMO_H__

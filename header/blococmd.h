@@ -6,11 +6,13 @@
 
 class BloboComando : public Comando {
 private:
+
   std::list<Comando> comandos;
 
 public:
-  void adicionarComando(Comando c);
+
+  void adicionarComando(Comando);
   void executar();
 };
 
-#endif
+#endif // ifndef __BLOCOCMD_H__

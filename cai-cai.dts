@@ -1,11 +1,11 @@
-tempo 400;
+tempo 350;
 musica "Cai Cai Balão"; faca
   i = 1;
   repetir (i =< 2); faca
     tocar(G, 1)  : "Cai,";  // sol seminima
     tocar(G, 1.) : "cai,";  // sol seminima + meia
     tocar(F, %2) : "ba";    // fa colcheia
-    se (j =< 2); faca
+    se (i == 1); faca
       tocar(E, 1) : "lao."; // fa seminima
     senao
       tocar(E, 1) : "lao";  // fa minima

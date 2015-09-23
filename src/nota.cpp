@@ -1,18 +1,11 @@
 #include "tp1.h"
 
-Nota::Nota(double nota, std::string nome) : nota(nota), nomeNota(nome) {
+using namespace std;
 
-}
+Nota::Nota(double nota,
+           string nome) : nota(nota), nomeNota(nome) {}
 
-Nota::operator double() const {
-  return this->nota;
-}
-
-Nota::operator std::string() const {
-  return this->nomeNota;
-}
-
-std::string Nota::nome() {
+string Nota::nome() {
   return this->nomeNota;
 }
 
@@ -33,37 +26,33 @@ const Nota Nota::FaSustenido(370.0, "F#");
 const Nota Nota::Sol(392.0, "G");
 const Nota Nota::SolSustenido(415.3, "G#");
 
-const Nota Nota::nomeParaNota(std::string nome) {
-  if (nome == "A")
-    return Nota::La;
-  // ...
-  else
-    return Nota::SolSustenido;
+list<Nota> notas = Nota::obterNotas();
+
+list<Nota>Nota::obterNotas() {
+  list<Nota> notas;
+
+  notas.push_front(Nota::La);
+  notas.push_front(Nota::LaSustenido);
+  notas.push_front(Nota::Si);
+  notas.push_front(Nota::Do);
+  notas.push_front(Nota::DoSustenido);
+  notas.push_front(Nota::Re);
+  notas.push_front(Nota::ReSustenido);
+  notas.push_front(Nota::Mi);
+  notas.push_front(Nota::Fa);
+  notas.push_front(Nota::FaSustenido);
+  notas.push_front(Nota::Sol);
+  notas.push_front(Nota::SolSustenido);
+
+  return notas;
 }
-// std::list<const Nota> notas = Nota::obterNotas();
-//
-// std::list<const Nota> Nota::obterNotas() {
-//   std::list<const Nota> notas;
-//   notas << Nota::La
-//         << Nota::LaSustenido
-//         << Nota::Si
-//         << Nota::Do
-//         << Nota::DoSustenido
-//         << Nota::Re
-//         << Nota::ReSustenido
-//         << Nota::Mi
-//         << Nota::Fa
-//         << Nota::FaSustenido
-//         << Nota::Sol
-//         << Nota::SolSustenido;
-//   return notas;
-// }
-//
-// const Nota Nota::nomeParaNota(std::string nome) {
-//   for (std::list<const Nota>::iterator it = notas.begin(); it != notas.end(); ++it) {
-//     if (nome == (std::string)(*it))
-//       return *it;
-//   }
-//
-//   return Nota::SolSustenido;
-// }
+
+Nota Nota::nomeParaNota(string nome) {
+  list<Nota>::iterator it;
+
+  for (it = notas.begin(); it != notas.end(); ++it) {
+    if (nome == it->nome()) return *it;
+  }
+
+  return Nota::SolSustenido;
+}

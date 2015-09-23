@@ -7,13 +7,17 @@
 
 class TocarComando : public Comando {
 private:
-  Nota nota;
+
+  Nota   nota;
   double duracao;
   std::string palavra;
 
 public:
-  TocarComando : nota(nota), duracao(duracao), palavra(palavra) {}
+
+  TocarComando(Nota,
+               double,
+               std::string);
   void executar();
 };
 
-#endif
+#endif // ifndef __TOCARCMD_H__

@@ -6,12 +6,16 @@
 
 class Nota {
 private:
+
   double nota;
   std::string nomeNota;
-//  static std::list<const Nota> listaNotas;
+  static std::list<Nota> listaNotas;
 
-  Nota(double, std::string);
+  Nota(double,
+       std::string);
+
 public:
+
   static const Nota La;
   static const Nota LaSustenido;
   static const Nota Si;
@@ -25,15 +29,11 @@ public:
   static const Nota Sol;
   static const Nota SolSustenido;
 
-  operator double() const;
-  operator std::string() const;
+  std::string           nome();
+  double                frequencia();
 
-  std::string nome();
-  double frequencia();
-
-//  static std::list<const Nota> obterNotas();
-  static const Nota nomeParaNota(std::string nome);
-
+  static std::list<Nota>obterNotas();
+  static Nota           nomeParaNota(std::string);
 };
 
-#endif
+#endif // ifndef __NOTA_H__

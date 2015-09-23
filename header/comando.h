@@ -3,7 +3,9 @@
 
 class Comando {
 public:
-  void executar();
+
+  virtual void executar();
+  virtual ~Comando();
 };
 
-#endif
+#endif // ifndef __COMANDO_H__
