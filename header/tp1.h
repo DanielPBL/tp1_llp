@@ -15,19 +15,10 @@
 #include "tempocmd.h"
 #include "tocarcmd.h"
 #include "atribcmd.h"
-// #include "blococmd.h"
+#include "pausarcmd.h"
+#include "blococmd.h"
+#include "secmd.h"
+#include "repetecmd.h"
 #include "sintatico.h"
-
-#include <map>
-
-namespace musica {
-  extern double tempo;
-  extern std::map<std::string, Variavel*> vars;
-
-  void initVars();
-  void printVars();
-  void destroiVars();
-}
-
 
 #endif // ifndef __TP1_H__

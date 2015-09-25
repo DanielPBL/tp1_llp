@@ -1,4 +1,4 @@
-#include "tp1.h"
+#include "lexico.h"
 #include <string>
 
 using namespace std;

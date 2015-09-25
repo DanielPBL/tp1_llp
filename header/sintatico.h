@@ -16,23 +16,23 @@ public:
   void init();
 
 private:
-
-  void             procPrograma();
+  double           getTempo();
+  BlocoComandos*   procPrograma();
   TempoComando*    procTempo();
-  void             procComandos();
+  BlocoComandos*   procComandos();
   Comando*         procComando();
   TocarComando*    procTocar();
   double           procDuracao();
-  void             procPausar();
+  PausarComando*   procPausar();
   AtribuirComando* procAtribuir();
-  void             procSe();
-  void             procRepetir();
+  SeComando*       procSe();
+  RepetirComando*  procRepetir();
   std::string      procString();
   ConstInt*        procNumero();
   Nota             procNota();
   Variavel*        procVar();
-  void             procBoolExp();
-  void             procRelOp();
+  ExprLogica*      procBoolExp();
+  RelOp            procRelOp();
   ExprInteira*     procIntExp();
   ArithOp          procArithOp();
   Termo*           procTerm();

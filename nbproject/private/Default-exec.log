@@ -1,0 +1,367 @@
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/lexico.o
+	src/lexico.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/nota.o
+	src/nota.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/termo.o
+	src/termo.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/variavel.o
+	src/variavel.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/globals.o
+	src/globals.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/comando.o
+	src/comando.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/tocarcmd.o
+	src/tocarcmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/constint.o
+	src/constint.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/tempocmd.o
+	src/tempocmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/exprint.o
+	src/exprint.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/exprintd.o
+	src/exprintd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/exprints.o
+	src/exprints.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/exprlog.o
+	src/exprlog.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/atribcmd.o
+	src/atribcmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/pausarcmd.o
+	src/pausarcmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/blococmd.o
+	src/blococmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/exprlogd.o
+	src/exprlogd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/secmd.o
+	src/secmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/repetecmd.o
+	src/repetecmd.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/sintatico.o
+	src/sintatico.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-Iheader
+	-Wall
+	-Werror
+	-g
+	-ggdb
+	-c
+	-o
+	obj/main.o
+	src/main.cpp
+
+called: g++
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	g++
+	-o
+	build/main.out
+	obj/lexico.o
+	obj/sintatico.o
+	obj/main.o
+	obj/nota.o
+	obj/tocarcmd.o
+	obj/comando.o
+	obj/globals.o
+	obj/termo.o
+	obj/variavel.o
+	obj/tempocmd.o
+	obj/constint.o
+	obj/exprint.o
+	obj/exprints.o
+	obj/exprintd.o
+	obj/exprlog.o
+	obj/exprlogd.o
+	obj/atribcmd.o
+	obj/pausarcmd.o
+	obj/blococmd.o
+	obj/secmd.o
+	obj/repetecmd.o
+
+called: /usr/bin/ld
+	/home/daniel/Dropbox/Cefet - EC/LLP/TP1
+	/usr/bin/ld
+	-plugin
+	/usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so
+	-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper
+	-plugin-opt=-fresolution=/tmp/ccdnLMvr.res
+	-plugin-opt=-pass-through=-lgcc_s
+	-plugin-opt=-pass-through=-lgcc
+	-plugin-opt=-pass-through=-lc
+	-plugin-opt=-pass-through=-lgcc_s
+	-plugin-opt=-pass-through=-lgcc
+	--sysroot=/
+	--build-id
+	--eh-frame-hdr
+	-m
+	elf_x86_64
+	--hash-style=gnu
+	--as-needed
+	-dynamic-linker
+	/lib64/ld-linux-x86-64.so.2
+	-z
+	relro
+	-o
+	build/main.out
+	/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o
+	/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o
+	/usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o
+	-L/usr/lib/gcc/x86_64-linux-gnu/4.9
+	-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu
+	-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib
+	-L/lib/x86_64-linux-gnu
+	-L/lib/../lib
+	-L/usr/lib/x86_64-linux-gnu
+	-L/usr/lib/../lib
+	-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..
+	obj/lexico.o
+	obj/sintatico.o
+	obj/main.o
+	obj/nota.o
+	obj/tocarcmd.o
+	obj/comando.o
+	obj/globals.o
+	obj/termo.o
+	obj/variavel.o
+	obj/tempocmd.o
+	obj/constint.o
+	obj/exprint.o
+	obj/exprints.o
+	obj/exprintd.o
+	obj/exprlog.o
+	obj/exprlogd.o
+	obj/atribcmd.o
+	obj/pausarcmd.o
+	obj/blococmd.o
+	obj/secmd.o
+	obj/repetecmd.o
+	-lstdc++
+	-lm
+	-lgcc_s
+	-lgcc
+	-lc
+	-lgcc_s
+	-lgcc
+	/usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o
+	/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o
+

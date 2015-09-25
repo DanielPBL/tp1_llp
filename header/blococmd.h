@@ -4,14 +4,15 @@
 #include "comando.h"
 #include <list>
 
-class BloboComando : public Comando {
+class BlocoComandos : public Comando {
 private:
 
-  std::list<Comando> comandos;
+  std::list<Comando*> comandos;
 
 public:
 
-  void adicionarComando(Comando);
+  BlocoComandos();
+  void adicionarComando(Comando*);
   void executar();
 };
 

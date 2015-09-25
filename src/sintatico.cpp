@@ -1,4 +1,5 @@
-#include "tp1.h"
+#include "sintatico.h"
+#include "globals.h"
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -41,20 +42,29 @@ void AnalisadorSintatico::matchToken(int tipo) {
 
 void AnalisadorSintatico::init() {
   musica::initVars();
-  this->procPrograma();
-  musica::printVars();
+  this->procPrograma()->executar();
   musica::destroiVars();
 }
 
-void AnalisadorSintatico::procPrograma() {
-  if (this->atual.tipo == TEMPO) this->procTempo()->executar();
+double AnalisadorSintatico::getTempo() {
+  return musica::tempo;
+}
+
+BlocoComandos* AnalisadorSintatico::procPrograma() {
+  BlocoComandos *cmds = new BlocoComandos();
+
+  if (this->atual.tipo == TEMPO)
+    cmds->adicionarComando(this->procTempo());
+
   this->matchToken(MUSICA);
   this->procString();
   this->matchToken(PONTO_VIRGULA);
   this->matchToken(FACA);
-  this->procComandos();
+  cmds->adicionarComando(this->procComandos());
   this->matchToken(FIM);
   this->matchToken(FIM_ARQ_NORMAL);
+
+  return cmds;
 }
 
 TempoComando* AnalisadorSintatico::procTempo() {
@@ -65,47 +75,44 @@ TempoComando* AnalisadorSintatico::procTempo() {
   return new TempoComando(tempo->getValor());
 }
 
-void AnalisadorSintatico::procComandos() {
+BlocoComandos* AnalisadorSintatico::procComandos() {
+  BlocoComandos *cmds = new BlocoComandos();
+
   while (this->atual.tipo == TOCAR ||
          this->atual.tipo == PAUSAR ||
          this->atual.tipo == VARIAVEL ||
          this->atual.tipo == SE ||
          this->atual.tipo == REPETIR) {
-    this->procComando();
+    cmds->adicionarComando(this->procComando());
   }
+
+  return cmds;
 }
 
 Comando* AnalisadorSintatico::procComando() {
-  Comando *comando = NULL;
-
   switch (this->atual.tipo) {
   case TOCAR:
-    comando = this->procTocar();
+    return this->procTocar();
     break;
 
   case PAUSAR:
-    this->procPausar();
+    return this->procPausar();
     break;
 
   case REPETIR:
-    this->procRepetir();
+    return this->procRepetir();
     break;
 
   case VARIAVEL:
-    comando = this->procAtribuir();
+    return this->procAtribuir();
     break;
 
   case SE:
-    this->procSe();
+    return this->procSe();
     break;
   }
 
-  if (comando == NULL) comando = new Comando();
-
-  comando->executar();
-  delete comando;
-
-  return comando;
+  return new Comando();
 }
 
 TocarComando * AnalisadorSintatico::procTocar() {
@@ -134,10 +141,10 @@ double AnalisadorSintatico::procDuracao() {
   if (this->atual.tipo == PORCENTO) {
     this->matchToken(PORCENTO);
     ConstInt *numero = this->procNumero();
-    duracao = musica::tempo / numero->getValor();
+    duracao = this->getTempo() / numero->getValor();
   } else {
     ConstInt *numero = this->procNumero();
-    duracao = musica::tempo / numero->getValor();
+    duracao = this->getTempo() / numero->getValor();
 
     if (this->atual.tipo == PONTO) {
       this->matchToken(PONTO);
@@ -148,12 +155,16 @@ double AnalisadorSintatico::procDuracao() {
   return duracao;
 }
 
-void AnalisadorSintatico::procPausar() {
+PausarComando* AnalisadorSintatico::procPausar() {
+  ConstInt *tempo;
+
   this->matchToken(PAUSAR);
   this->matchToken(ABRE_PARENTESES);
-  this->procNumero();
+  tempo = this->procNumero();
   this->matchToken(FECHA_PARENTESES);
   this->matchToken(PONTO_VIRGULA);
+
+  return new PausarComando(tempo);
 }
 
 AtribuirComando* AnalisadorSintatico::procAtribuir() {
@@ -168,31 +179,44 @@ AtribuirComando* AnalisadorSintatico::procAtribuir() {
   return new AtribuirComando(var, expr);
 }
 
-void AnalisadorSintatico::procSe() {
+SeComando* AnalisadorSintatico::procSe() {
+  ExprLogica *expr;
+  BlocoComandos *se;
+  BlocoComandos *senao = NULL;
+
   this->matchToken(SE);
   this->matchToken(ABRE_PARENTESES);
-  this->procBoolExp();
+  expr = this->procBoolExp();
   this->matchToken(FECHA_PARENTESES);
   this->matchToken(PONTO_VIRGULA);
   this->matchToken(FACA);
-  this->procComandos();
+  se = this->procComandos();
 
   if (this->atual.tipo == SENAO) {
     this->matchToken(SENAO);
-    this->procComandos();
+    senao = this->procComandos();
   }
   this->matchToken(FIM);
+
+  if (senao == NULL) senao = new BlocoComandos();
+
+  return new SeComando(expr, se, senao);
 }
 
-void AnalisadorSintatico::procRepetir() {
+RepetirComando* AnalisadorSintatico::procRepetir() {
+  ExprLogica *expr;
+  BlocoComandos *cmds;
+
   this->matchToken(REPETIR);
   this->matchToken(ABRE_PARENTESES);
-  this->procBoolExp();
+  expr = this->procBoolExp();
   this->matchToken(FECHA_PARENTESES);
   this->matchToken(PONTO_VIRGULA);
   this->matchToken(FACA);
-  this->procComandos();
+  cmds = this->procComandos();
   this->matchToken(FIM);
+
+  return new RepetirComando(expr, cmds);
 }
 
 string AnalisadorSintatico::procString() {
@@ -227,38 +251,45 @@ Variavel* AnalisadorSintatico::procVar() {
   return musica::vars[var];
 }
 
-void AnalisadorSintatico::procBoolExp() {
-  this->procTerm();
-  this->procRelOp();
-  this->procTerm();
+ExprLogica* AnalisadorSintatico::procBoolExp() {
+  Termo *termo1, *termo2;
+  RelOp op;
+
+  termo1 = this->procTerm();
+  op = this->procRelOp();
+  termo2 = this->procTerm();
+
+  return new ExprLogicaDupla(termo1, op, termo2);
 }
 
-void AnalisadorSintatico::procRelOp() {
+RelOp AnalisadorSintatico::procRelOp() {
   switch (this->atual.tipo) {
   case IGUAL_IGUAL:
     this->matchToken(IGUAL_IGUAL);
-    break;
+    return Igual;
 
   case DIFERENTE:
     this->matchToken(DIFERENTE);
-    break;
+    return Diferente;
 
   case MENOR:
     this->matchToken(MENOR);
-    break;
+    return Menor;
 
   case MAIOR:
     this->matchToken(MAIOR);
-    break;
+    return Maior;
 
   case IGUAL_MENOR:
     this->matchToken(IGUAL_MENOR);
-    break;
+    return MenorIgual;
 
   case MAIOR_IGUAL:
     this->matchToken(MAIOR_IGUAL);
-    break;
+    return MaiorIgual;
   }
+
+  return Igual;
 }
 
 ExprInteira* AnalisadorSintatico::procIntExp() {

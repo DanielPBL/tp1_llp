@@ -1,4 +1,4 @@
-#include "tp1.h"
+#include "globals.h"
 #include "variavel.h"
 
 Variavel::Variavel() : valor(0) {}

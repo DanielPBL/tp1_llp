@@ -1,5 +1,4 @@
-#include "tp1.h"
-#include <map>
+#include "globals.h"
 #include <iostream>
 
 using namespace std;
@@ -35,14 +34,6 @@ namespace musica {
     vars["x"] = new Variavel();
     vars["y"] = new Variavel();
     vars["z"] = new Variavel();
-  }
-
-  void printVars() {
-    map<string, Variavel*>::iterator it;
-
-    for (it = vars.begin(); it != vars.end(); ++it)
-      cout << "Variável: " << it->first << " - Valor: " << it->second->getValor() << endl;
-
   }
 
   void destroiVars() {

@@ -4,7 +4,7 @@
 class ExprLogica {
 public:
 
-  bool avaliar();
+  virtual bool avaliar();
 };
 
 #endif // ifndef __EXPRLOG_H__

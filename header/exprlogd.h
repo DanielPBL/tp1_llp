@@ -2,6 +2,7 @@
 #define __EXPRLOGD_H__
 
 #include "termo.h"
+#include "exprlog.h"
 
 enum RelOp {
   Igual,
@@ -12,7 +13,7 @@ enum RelOp {
   MaiorIgual
 };
 
-class ExprLogicaDupla {
+class ExprLogicaDupla : public ExprLogica {
 private:
 
   Termo *termo1;

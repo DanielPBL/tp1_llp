@@ -1,6 +1,7 @@
-#include "tp1.h"
+#include "globals.h"
 #include "tempocmd.h"
-
+#include <iostream>
+using namespace std;
 TempoComando::TempoComando(ConstInt tempo) : tempo(tempo) {}
 
 void TempoComando::executar() {
