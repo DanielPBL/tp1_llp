@@ -7,12 +7,12 @@
 
 class AtribuirComando : public Comando {
 private:
-  Variavel var;
-  ExprInteira expr;
+  Variavel *var;
+  ExprInteira *expr;
 
 public:
 
-  AtribuirComando(Variavel, ExprInteira);
+  AtribuirComando(Variavel* , ExprInteira*);
   void executar();
 };
 

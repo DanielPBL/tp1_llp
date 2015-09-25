@@ -1,12 +1,10 @@
 #ifndef __EXPRLOG_H__
 #define __EXPRLOG_H__
 
-#include "expr.h"
-
-class ExprLogica : public Expressao {
+class ExprLogica {
 public:
 
   bool avaliar();
 };
 
-#endif // ifndef __TOCARCMD_H__
+#endif // ifndef __EXPRLOG_H__

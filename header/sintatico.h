@@ -17,25 +17,25 @@ public:
 
 private:
 
-  void          procPrograma();
-  TempoComando* procTempo();
-  void          procComandos();
-  Comando*      procComando();
-  TocarComando* procTocar();
-  double        procDuracao();
-  void          procPausar();
-  void          procAtribuir();
-  void          procSe();
-  void          procRepetir();
-  std::string   procString();
-  ConstInt      procNumero();
-  Nota          procNota();
-  Variavel*     procVar();
-  void          procBoolExp();
-  void          procRelOp();
-  void          procIntExp();
-  void          procArithOp();
-  void          procTerm();
+  void             procPrograma();
+  TempoComando*    procTempo();
+  void             procComandos();
+  Comando*         procComando();
+  TocarComando*    procTocar();
+  double           procDuracao();
+  void             procPausar();
+  AtribuirComando* procAtribuir();
+  void             procSe();
+  void             procRepetir();
+  std::string      procString();
+  ConstInt*        procNumero();
+  Nota             procNota();
+  Variavel*        procVar();
+  void             procBoolExp();
+  void             procRelOp();
+  ExprInteira*     procIntExp();
+  ArithOp          procArithOp();
+  Termo*           procTerm();
 };
 
 #endif // ifndef __SINTATICO_H__

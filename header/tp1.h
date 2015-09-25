@@ -7,9 +7,14 @@
 #include "constint.h"
 #include "termo.h"
 #include "variavel.h"
+#include "exprint.h"
+#include "exprints.h"
+#include "exprintd.h"
+#include "exprlog.h"
+#include "exprlogd.h"
 #include "tempocmd.h"
 #include "tocarcmd.h"
-// #include "atribcmd.h"
+#include "atribcmd.h"
 // #include "blococmd.h"
 #include "sintatico.h"
 
@@ -20,6 +25,7 @@ namespace musica {
   extern std::map<std::string, Variavel*> vars;
 
   void initVars();
+  void printVars();
   void destroiVars();
 }
 

@@ -12,7 +12,8 @@ RMFLAGS=-rf
 TARGET=build/main.out
 OBJS=obj/lexico.o obj/sintatico.o obj/main.o obj/nota.o obj/tocarcmd.o \
      obj/comando.o obj/globals.o obj/termo.o obj/variavel.o obj/tempocmd.o \
-		 obj/constint.o
+		 obj/constint.o obj/exprint.o obj/exprints.o obj/exprintd.o obj/exprlog.o\
+		 obj/exprlogd.o obj/atribcmd.o
 
 all: $(TARGET)
 
@@ -46,14 +47,36 @@ obj/comando.o: header/comando.h src/comando.cpp obj/globals.o
 obj/constint.o: header/constint.h src/constint.cpp obj/termo.o
 	$(CXX) $(CXXFLAGS) -c -o $@ src/constint.cpp
 
+obj/expr.o: header/expr.h src/expr.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ src/expr.cpp
+
+obj/exprint.o: header/exprint.h src/exprint.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ src/exprint.cpp
+
+obj/exprints.o: header/exprints.h src/exprints.cpp obj/exprint.o
+	$(CXX) $(CXXFLAGS) -c -o $@ src/exprints.cpp
+
+obj/exprintd.o: header/exprintd.h src/exprintd.cpp obj/exprint.o
+	$(CXX) $(CXXFLAGS) -c -o $@ src/exprintd.cpp
+
+obj/exprlog.o: header/exprlog.h src/exprlog.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ src/exprlog.cpp
+
+obj/exprlogd.o: header/exprlogd.h src/exprlogd.cpp obj/exprlog.o
+	$(CXX) $(CXXFLAGS) -c -o $@ src/exprlogd.cpp
+
 obj/tempocmd.o: header/tempocmd.h src/tempocmd.cpp obj/comando.o obj/constint.o
 	$(CXX) $(CXXFLAGS) -c -o $@ src/tempocmd.cpp
 
 obj/tocarcmd.o: header/tocarcmd.h src/tocarcmd.cpp obj/nota.o obj/comando.o
 	$(CXX) $(CXXFLAGS) -c -o $@ src/tocarcmd.cpp
 
+obj/atribcmd.o: header/atribcmd.h src/atribcmd.cpp obj/exprintd.o obj/exprints.o \
+								obj/exprlog.o
+	$(CXX) $(CXXFLAGS) -c -o $@ src/atribcmd.cpp
+
 obj/sintatico.o: header/sintatico.h src/sintatico.cpp obj/lexico.o obj/nota.o \
-	               obj/tocarcmd.o obj/tempocmd.o obj/constint.o
+	               obj/tocarcmd.o obj/tempocmd.o obj/constint.o obj/atribcmd.o 
 	$(CXX) $(CXXFLAGS) -c -o $@ src/sintatico.cpp
 
 obj/main.o: src/main.cpp obj/sintatico.o

@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -41,6 +42,7 @@ void AnalisadorSintatico::matchToken(int tipo) {
 void AnalisadorSintatico::init() {
   musica::initVars();
   this->procPrograma();
+  musica::printVars();
   musica::destroiVars();
 }
 
@@ -57,10 +59,10 @@ void AnalisadorSintatico::procPrograma() {
 
 TempoComando* AnalisadorSintatico::procTempo() {
   this->matchToken(TEMPO);
-  ConstInt tempo = this->procNumero();
+  ConstInt *tempo = this->procNumero();
   this->matchToken(PONTO_VIRGULA);
 
-  return new TempoComando(tempo);
+  return new TempoComando(tempo->getValor());
 }
 
 void AnalisadorSintatico::procComandos() {
@@ -73,7 +75,7 @@ void AnalisadorSintatico::procComandos() {
   }
 }
 
-Comando * AnalisadorSintatico::procComando() {
+Comando* AnalisadorSintatico::procComando() {
   Comando *comando = NULL;
 
   switch (this->atual.tipo) {
@@ -90,7 +92,7 @@ Comando * AnalisadorSintatico::procComando() {
     break;
 
   case VARIAVEL:
-    this->procAtribuir();
+    comando = this->procAtribuir();
     break;
 
   case SE:
@@ -131,11 +133,11 @@ double AnalisadorSintatico::procDuracao() {
 
   if (this->atual.tipo == PORCENTO) {
     this->matchToken(PORCENTO);
-    ConstInt numero = this->procNumero();
-    duracao = musica::tempo / numero.getValor();
+    ConstInt *numero = this->procNumero();
+    duracao = musica::tempo / numero->getValor();
   } else {
-    ConstInt numero = this->procNumero();
-    duracao = musica::tempo / numero.getValor();
+    ConstInt *numero = this->procNumero();
+    duracao = musica::tempo / numero->getValor();
 
     if (this->atual.tipo == PONTO) {
       this->matchToken(PONTO);
@@ -154,11 +156,16 @@ void AnalisadorSintatico::procPausar() {
   this->matchToken(PONTO_VIRGULA);
 }
 
-void AnalisadorSintatico::procAtribuir() {
-  this->procVar();
+AtribuirComando* AnalisadorSintatico::procAtribuir() {
+  Variavel *var;
+  ExprInteira* expr;
+
+  var = this->procVar();
   this->matchToken(IGUAL);
-  this->procIntExp();
+  expr = this->procIntExp();
   this->matchToken(PONTO_VIRGULA);
+
+  return new AtribuirComando(var, expr);
 }
 
 void AnalisadorSintatico::procSe() {
@@ -196,12 +203,12 @@ string AnalisadorSintatico::procString() {
   return str;
 }
 
-ConstInt AnalisadorSintatico::procNumero() {
+ConstInt* AnalisadorSintatico::procNumero() {
   string num = this->atual.token;
 
   this->matchToken(NUMERO);
 
-  return ConstInt(atoi(num.c_str()));
+  return new ConstInt(atoi(num.c_str()));
 }
 
 Nota AnalisadorSintatico::procNota() {
@@ -254,39 +261,54 @@ void AnalisadorSintatico::procRelOp() {
   }
 }
 
-void AnalisadorSintatico::procIntExp() {
-  this->procTerm();
+ExprInteira* AnalisadorSintatico::procIntExp() {
+  Termo *termo1, *termo2;
+  ArithOp op;
+  ExprInteira *expr;
+
+  termo1 = this->procTerm();
 
   if ((this->atual.tipo == MAIS) ||
       (this->atual.tipo == MENOS) ||
       (this->atual.tipo == VEZES) ||
       (this->atual.tipo == DIVIDIDO)) {
-    this->procArithOp();
-    this->procTerm();
+    op = this->procArithOp();
+    termo2 = this->procTerm();
+    expr = new ExprInteiraDupla(termo1, op, termo2);
+  } else {
+    expr = new ExprInteiraSimples(termo1);
   }
+
+  return expr;
 }
 
-void AnalisadorSintatico::procArithOp() {
+ArithOp AnalisadorSintatico::procArithOp() {
   switch (this->atual.tipo) {
   case MAIS:
     this->matchToken(MAIS);
-    break;
+    return Mais;
 
   case MENOS:
     this->matchToken(MENOS);
-    break;
+    return Menos;
 
   case VEZES:
     this->matchToken(VEZES);
-    break;
+    return Multiplicacao;
 
   case DIVIDIDO:
     this->matchToken(DIVIDIDO);
-    break;
+    return Divisao;
   }
+
+  return Mais;
 }
 
-void AnalisadorSintatico::procTerm() {
-  if (this->atual.tipo == VARIAVEL) this->procVar();
-  else this->procNumero();
+Termo* AnalisadorSintatico::procTerm() {
+  Termo *termo;
+
+  if (this->atual.tipo == VARIAVEL) termo = this->procVar();
+  else termo = this->procNumero();
+
+  return termo;
 }

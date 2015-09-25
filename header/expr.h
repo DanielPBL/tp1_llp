@@ -1,10 +1,10 @@
 #ifndef __EXPR_H__
 #define __EXPR_H__
 
-template <class E> class Expressao {
+class Expressao {
 public:
 
-  E avaliar();
+  template<class E> E avaliar();
 };
 
-#endif // ifndef __TOCARCMD_H__
+#endif // ifndef __EXPR_H__

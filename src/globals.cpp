@@ -1,9 +1,12 @@
 #include "tp1.h"
 #include <map>
+#include <iostream>
+
+using namespace std;
 
 namespace musica {
   double tempo = 500;
-  std::map<std::string, Variavel*> vars;
+  map<string, Variavel*> vars;
 
   void initVars() {
     vars["a"] = new Variavel();
@@ -34,8 +37,16 @@ namespace musica {
     vars["z"] = new Variavel();
   }
 
+  void printVars() {
+    map<string, Variavel*>::iterator it;
+
+    for (it = vars.begin(); it != vars.end(); ++it)
+      cout << "Variável: " << it->first << " - Valor: " << it->second->getValor() << endl;
+
+  }
+
   void destroiVars() {
-    std::map<std::string, Variavel*>::iterator it;
+    map<string, Variavel*>::iterator it;
 
     for (it = vars.begin(); it != vars.end(); ++it)
       delete it->second;
