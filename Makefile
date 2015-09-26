@@ -14,7 +14,7 @@ OBJS=obj/lexico.o obj/sintatico.o obj/main.o obj/nota.o obj/tocarcmd.o \
      obj/comando.o obj/globals.o obj/termo.o obj/variavel.o obj/tempocmd.o \
 		 obj/constint.o obj/exprint.o obj/exprints.o obj/exprintd.o obj/exprlog.o \
 		 obj/exprlogd.o obj/atribcmd.o obj/pausarcmd.o obj/blococmd.o obj/secmd.o \
-		 obj/repetecmd.o
+		 obj/repetecmd.o obj/duracao.o
 
 all: $(TARGET)
 
@@ -41,6 +41,9 @@ obj/globals.o: header/globals.h obj/termo.o obj/variavel.o
 
 obj/nota.o: header/nota.h src/nota.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ src/nota.cpp
+
+obj/duracao.o: header/duracao.h src/duracao.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ src/duracao.cpp
 
 obj/comando.o: header/comando.h src/comando.cpp obj/globals.o
 	$(CXX) $(CXXFLAGS) -c -o $@ src/comando.cpp
@@ -69,7 +72,8 @@ obj/exprlogd.o: header/exprlogd.h src/exprlogd.cpp obj/exprlog.o
 obj/tempocmd.o: header/tempocmd.h src/tempocmd.cpp obj/comando.o obj/constint.o
 	$(CXX) $(CXXFLAGS) -c -o $@ src/tempocmd.cpp
 
-obj/tocarcmd.o: header/tocarcmd.h src/tocarcmd.cpp obj/nota.o obj/comando.o
+obj/tocarcmd.o: header/tocarcmd.h src/tocarcmd.cpp obj/nota.o obj/comando.o \
+								obj/duracao.o
 	$(CXX) $(CXXFLAGS) -c -o $@ src/tocarcmd.cpp
 
 obj/atribcmd.o: header/atribcmd.h src/atribcmd.cpp obj/exprintd.o obj/exprints.o \

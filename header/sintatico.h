@@ -16,13 +16,13 @@ public:
   void init();
 
 private:
-  double           getTempo();
+
   BlocoComandos*   procPrograma();
   TempoComando*    procTempo();
   BlocoComandos*   procComandos();
   Comando*         procComando();
   TocarComando*    procTocar();
-  double           procDuracao();
+  Duracao*         procDuracao();
   PausarComando*   procPausar();
   AtribuirComando* procAtribuir();
   SeComando*       procSe();

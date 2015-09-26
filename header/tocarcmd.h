@@ -4,18 +4,19 @@
 #include <string>
 #include "nota.h"
 #include "comando.h"
+#include "duracao.h"
 
 class TocarComando : public Comando {
 private:
 
-  Nota   nota;
-  double duracao;
+  Nota nota;
+  Duracao *duracao;
   std::string palavra;
 
 public:
 
   TocarComando(Nota,
-               double,
+               Duracao*,
                std::string);
   void executar();
 };

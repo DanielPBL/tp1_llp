@@ -12,6 +12,7 @@
 #include "exprintd.h"
 #include "exprlog.h"
 #include "exprlogd.h"
+#include "duracao.h"
 #include "tempocmd.h"
 #include "tocarcmd.h"
 #include "atribcmd.h"

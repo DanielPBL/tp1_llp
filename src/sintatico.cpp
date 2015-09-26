@@ -46,10 +46,6 @@ void AnalisadorSintatico::init() {
   musica::destroiVars();
 }
 
-double AnalisadorSintatico::getTempo() {
-  return musica::tempo;
-}
-
 BlocoComandos* AnalisadorSintatico::procPrograma() {
   BlocoComandos *cmds = new BlocoComandos();
 
@@ -116,7 +112,7 @@ Comando* AnalisadorSintatico::procComando() {
 }
 
 TocarComando * AnalisadorSintatico::procTocar() {
-  double duracao;
+  Duracao *duracao;
   string palavra = "";
 
   this->matchToken(TOCAR);
@@ -135,25 +131,29 @@ TocarComando * AnalisadorSintatico::procTocar() {
   return new TocarComando(nota, duracao, palavra);
 }
 
-double AnalisadorSintatico::procDuracao() {
-  double duracao = 0;
+Duracao* AnalisadorSintatico::procDuracao() {
+  Duracao *duracao = NULL;
 
   if (this->atual.tipo == PORCENTO) {
     this->matchToken(PORCENTO);
     ConstInt *numero = this->procNumero();
-    duracao = this->getTempo() / numero->getValor();
+    duracao = new Duracao(numero->getValor(), Colcheia);
   } else {
     ConstInt *numero = this->procNumero();
-    duracao = this->getTempo() / numero->getValor();
+    duracao = new Duracao(numero->getValor(), Seminima);
 
     if (this->atual.tipo == PONTO) {
+      delete duracao;
       this->matchToken(PONTO);
-      duracao *= 1.5;
+      duracao = new Duracao(numero->getValor(), Meia);
     }
   }
 
+  if (duracao == NULL) duracao = new Duracao(1, Seminima);
+
   return duracao;
 }
+
 
 PausarComando* AnalisadorSintatico::procPausar() {
   ConstInt *tempo;
