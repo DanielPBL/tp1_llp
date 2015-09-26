@@ -1,4 +1,4 @@
-tempo 350;
+tempo 400;
 musica "Cai Cai Balão"; faca
   i = 1;
   repetir (i =< 2); faca
