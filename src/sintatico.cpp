@@ -16,29 +16,34 @@ void AnalisadorSintatico::matchToken(int tipo) {
   if (this->atual.tipo == tipo) {
     this->atual = this->lexica.getLexema();
   } else {
-    char   l[10];
-    string msg = "";
-    sprintf(l, "%02d", this->lexica.getLinha());
-    string linha(l);
-    msg = linha + ": ";
-
     switch (this->atual.tipo) {
     case TOKEN_INVALIDO:
-      msg += "Lexema inválido [" + this->atual.token + "]";
+      this->lancaExcessao("Lexema inválido [" + this->atual.token + "]");
       break;
 
     case FIM_ARQ_INESPERADO:
     case FIM_ARQ_NORMAL:
-      msg += "Fim de arquivo inesperado";
+      this->lancaExcessao("Fim de arquivo inesperado");
       break;
 
     default:
-      msg += "Lexema não esperado [" + this->atual.token + "]";
+      this->lancaExcessao("Lexema não esperado [" + this->atual.token + "]");
     }
-
-    throw msg;
   }
 }
+
+
+void AnalisadorSintatico::lancaExcessao(string aviso) {
+  char   l[10];
+  string msg = "";
+
+  sprintf(l, "%02d", this->lexica.getLinha());
+  string linha(l);
+  msg = linha + ": " + aviso;
+
+  throw msg;
+}
+
 
 void AnalisadorSintatico::init() {
   musica::initVars();
@@ -63,13 +68,16 @@ BlocoComandos* AnalisadorSintatico::procPrograma() {
   return cmds;
 }
 
-TempoComando* AnalisadorSintatico::procTempo() {
+TempoComando * AnalisadorSintatico::procTempo() {
   this->matchToken(TEMPO);
   ConstInt *tempo = this->procNumero();
+  if (tempo->getValor() <= 0)
+    this->lancaExcessao("Operação inválida");
   this->matchToken(PONTO_VIRGULA);
 
   return new TempoComando(tempo->getValor());
 }
+
 
 BlocoComandos* AnalisadorSintatico::procComandos() {
   BlocoComandos *cmds = new BlocoComandos();
@@ -133,13 +141,14 @@ TocarComando * AnalisadorSintatico::procTocar() {
 
 Duracao* AnalisadorSintatico::procDuracao() {
   Duracao *duracao = NULL;
+  ConstInt *numero;
 
   if (this->atual.tipo == PORCENTO) {
     this->matchToken(PORCENTO);
-    ConstInt *numero = this->procNumero();
+    numero = this->procNumero();
     duracao = new Duracao(numero->getValor(), Colcheia);
   } else {
-    ConstInt *numero = this->procNumero();
+    numero = this->procNumero();
     duracao = new Duracao(numero->getValor(), Seminima);
 
     if (this->atual.tipo == PONTO) {
@@ -148,6 +157,9 @@ Duracao* AnalisadorSintatico::procDuracao() {
       duracao = new Duracao(numero->getValor(), Meia);
     }
   }
+
+  if (numero->getValor() <= 0)
+    this->lancaExcessao("Operação inválida");
 
   if (duracao == NULL) duracao = new Duracao(1, Seminima);
 
@@ -161,6 +173,8 @@ PausarComando* AnalisadorSintatico::procPausar() {
   this->matchToken(PAUSAR);
   this->matchToken(ABRE_PARENTESES);
   tempo = this->procNumero();
+  if (tempo->getValor() <= 0)
+    this->lancaExcessao("Operação inválida");
   this->matchToken(FECHA_PARENTESES);
   this->matchToken(PONTO_VIRGULA);
 

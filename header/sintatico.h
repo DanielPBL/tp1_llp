@@ -17,6 +17,8 @@ public:
 
 private:
 
+  void             lancaExcessao(std::string);
+
   BlocoComandos*   procPrograma();
   TempoComando*    procTempo();
   BlocoComandos*   procComandos();
